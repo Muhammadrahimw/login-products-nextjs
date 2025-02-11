@@ -1,7 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	images: {
-		domains: ["storage.googleapis.com", "coffective.com"],
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "storage.googleapis.com",
+			},
+			{
+				protocol: "https",
+				hostname: "coffective.com",
+			},
+		],
 	},
 };
 

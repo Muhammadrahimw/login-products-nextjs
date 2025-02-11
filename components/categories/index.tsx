@@ -5,8 +5,9 @@ import {Button} from "../ui/button";
 import {ShoppingBag} from "lucide-react";
 import {Skeleton} from "../ui/skeleton";
 import {useDispatch} from "react-redux";
-import {addShopProduct, setCategory} from "@/redux/category-slice";
+import {setCategory, updateAllProducts} from "@/redux/category-slice";
 import {useEffect} from "react";
+import Link from "next/link";
 
 export const CategoryComponent = () => {
 	const dispatch = useDispatch();
@@ -18,7 +19,9 @@ export const CategoryComponent = () => {
 	useEffect(() => {
 		dispatch(setCategory(data?.categories[0]));
 		dispatch(
-			addShopProduct(JSON.parse(localStorage.getItem(`shopProducts`) || `[]`))
+			updateAllProducts(
+				JSON.parse(localStorage.getItem(`shopProducts`) || `[]`)
+			)
 		);
 	}, [data]);
 
@@ -46,7 +49,9 @@ export const CategoryComponent = () => {
 			{isLoading || isError ? (
 				<Skeleton className="w-[2.5em] h-10" />
 			) : (
-				<ShoppingBag className="cursor-pointer" size={25} />
+				<Link href={`/shop`}>
+					<ShoppingBag className="cursor-pointer" size={25} />
+				</Link>
 			)}
 		</div>
 	);

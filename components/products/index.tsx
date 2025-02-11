@@ -7,7 +7,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/redux/store";
 import {ShoppingBag} from "lucide-react";
 import type {productType} from "@/@types/intex";
-import {addShopProduct} from "@/redux/category-slice";
 import {Button} from "../ui/button";
 
 export const ProductsComponent = () => {
@@ -24,6 +23,18 @@ export const ProductsComponent = () => {
 	const filteredData = data?.products.filter(
 		(value: productType) => value.category === selectedCategory
 	);
+
+	const addShopProduct = (product: productType) => {
+		const productShop = JSON.parse(localStorage.getItem(`productShop`) || `[]`);
+		const checkedProductShop = productShop.some(
+			(value: productType) => value.id === product.id
+		);
+
+		if (!checkedProductShop) {
+			productShop.push(product);
+			localStorage.setItem("productShop", JSON.stringify(productShop));
+		}
+	};
 
 	return (
 		<>
@@ -48,7 +59,9 @@ export const ProductsComponent = () => {
 					</CardContent>
 					<CardFooter>
 						<Button
-							onClick={() => dispatch(addShopProduct(value))}
+							onClick={() => {
+								addShopProduct(value);
+							}}
 							className="w-full"
 							variant={"outline"}>
 							<p className="text-[1.2em]">Add to Shop</p>

@@ -20,12 +20,15 @@ const categorySlice = createSlice({
 		setCategory: (state, action: PayloadAction<string>) => {
 			state.selectedCategory = action.payload;
 		},
+		updateAllProducts: (state, {payload}: PayloadAction<productType[]>) => {
+			state.shop = payload;
+		},
 		addShopProduct: (state, {payload}: PayloadAction<productType>) => {
 			state.shop.push(payload);
-			localStorage.setItem(`shopProducts`, JSON.stringify(state.shop));
 		},
 	},
 });
 
-export const {setCategory, addShopProduct} = categorySlice.actions;
+export const {setCategory, addShopProduct, updateAllProducts} =
+	categorySlice.actions;
 export default categorySlice.reducer;
