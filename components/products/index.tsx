@@ -1,44 +1,60 @@
 "use client";
 
 import {useGetFetch} from "@/hooks/getFetch";
-import {Card, CardContent, CardHeader, CardTitle} from "../ui/card";
+import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "../ui/card";
 import Image from "next/image";
-
-interface productType {
-	id: number;
-	title: string;
-	image: string;
-	price: number;
-	description: string;
-	brand: string;
-	model: string;
-	color: string;
-	category: string;
-	discount: number;
-}
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/redux/store";
+import {ShoppingBag} from "lucide-react";
+import type {productType} from "@/@types/intex";
+import {addShopProduct} from "@/redux/category-slice";
+import {Button} from "../ui/button";
 
 export const ProductsComponent = () => {
+	const dispatch = useDispatch();
 	const {data, isLoading, isError} = useGetFetch({
 		key: `products`,
 		url: `products`,
 	});
 
-	console.log(data?.products[0]);
+	const selectedCategory = useSelector(
+		(state: RootState) => state.category.selectedCategory
+	);
+
+	const filteredData = data?.products.filter(
+		(value: productType) => value.category === selectedCategory
+	);
 
 	return (
 		<>
-			{data?.products.map((value: productType) => (
-				<Card>
+			{filteredData?.slice(0, 8).map((value: productType) => (
+				<Card key={value.id}>
 					<CardHeader>
-						<CardTitle className="text-base">
-							{/* {value.title.slice(0, 32)} */}
+						<CardTitle className="text-xl">
+							{value.title.slice(0, 47)}...
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
-						{/* {value.image && (
-							<Image src={value.image} width={200} height={200} alt="fs" />
-						)} */}
+						{value.image && (
+							<Image
+								src={value.image}
+								width={500}
+								height={500}
+								className="w-full h-auto max-h-[17.5em] min-h-[17.5em] object-cover"
+								alt="product image"
+								priority
+							/>
+						)}
 					</CardContent>
+					<CardFooter>
+						<Button
+							onClick={() => dispatch(addShopProduct(value))}
+							className="w-full"
+							variant={"outline"}>
+							<p className="text-[1.2em]">Add to Shop</p>
+							<ShoppingBag className="cursor-pointer" size={30} />
+						</Button>
+					</CardFooter>
 				</Card>
 			))}
 		</>
