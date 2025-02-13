@@ -1,5 +1,11 @@
+import {LoginComponent} from "@/components/login";
+
 const Home = () => {
-	return <div>Home</div>;
+	return (
+		<>
+			<LoginComponent />{" "}
+		</>
+	);
 };
 
 export default Home;
